@@ -1,0 +1,57 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import math
+import cmath
+
+pi=cmath.pi
+
+f=1
+t=np.linspace(0,1,6)
+t=t[:-1]
+x=[]
+for time in t:
+    x.append(np.exp(2*pi*f*time))
+
+def DFT(x):
+    y=[]
+    n=len(x)
+    for k in range(n):
+        y_k=0
+        for j in range(n):
+            y_k += x[j]*cmath.exp(-1j*2*cmath.pi/n*j*k)
+        y_k= y_k/cmath.sqrt(n)
+        y.append(y_k)
+    return y
+
+
+def dft_function(t,x,r):
+    n = len(x)
+    c=t[0]
+    d=math.ceil(t[n-1])
+    l=np.linspace(c,d,100)
+    p=0
+    plt.figure(1)
+    for k in range(n):
+        a=r[k].real
+        b=r[k].imag
+        p=(a+b*1j)*np.exp(1j*2*cmath.pi*k*(l-c)/(d-c))
+        plt.figure(1)
+
+        plt.scatter(t,x)
+        plt.plot(l,p,linestyle=':')
+        p +=p
+    p=p/cmath.sqrt(n)
+    plt.plot(l,p)
+    return (l,p)
+
+s=DFT(x)
+
+
+
+l,p=dft_function(t,x,s)
+plt.figure(2)
+plt.scatter(t,x)
+plt.plot(l,p)
+plt.xlabel('time')
+plt.ylabel('signal')
+plt.show()
